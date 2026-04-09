@@ -1,0 +1,28 @@
+auto lo
+iface lo inet loopback
+
+iface eno1 inet manual
+
+auto vmbr0
+iface vmbr0 inet manual
+    bridge-ports eno1
+    bridge-stp off
+    bridge-fd 0
+    bridge-vlan-aware yes
+    bridge-vids 2-4094
+
+auto vmbr0.10
+iface vmbr0.10 inet static
+    address 10.10.10.10/24
+    gateway 10.10.10.1
+
+# Example notes:
+# - vmbr0 is the primary bridge attached to the physical NIC
+# - VLAN-aware mode allows guest tagging across the bridge
+# - vmbr0.10 is the management interface for the Proxmox host
+# - Guest VMs can be assigned VLAN tags such as 20 or 30 in Proxmox
+
+# Replace:
+# - eno1 with your actual physical NIC
+# - 10.10.10.10/24 with your actual Proxmox management address
+# - 10.10.10.1 with the pfSense gateway for the management VLAN
